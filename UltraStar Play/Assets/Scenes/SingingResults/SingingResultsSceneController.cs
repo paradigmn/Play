@@ -32,8 +32,8 @@ public class SingingResultsSceneController : MonoBehaviour
     private void FillLayout()
     {
         SongMeta songMeta = sceneData.SongMeta;
-        string titleText = (String.IsNullOrEmpty(songMeta.Title)) ? "" : songMeta.Title;
-        string artistText = (String.IsNullOrEmpty(songMeta.Artist)) ? "" : " - " + songMeta.Artist;
+        string titleText = (string.IsNullOrEmpty(songMeta.Title)) ? "" : songMeta.Title;
+        string artistText = (string.IsNullOrEmpty(songMeta.Artist)) ? "" : " - " + songMeta.Artist;
         songLabel.text = titleText + artistText;
 
         int i = 0;

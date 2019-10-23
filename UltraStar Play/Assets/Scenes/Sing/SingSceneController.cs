@@ -151,7 +151,7 @@ public class SingSceneController : MonoBehaviour
 
     void OnEnable()
     {
-        string playerProfilesCsv = String.Join(",", sceneData.SelectedPlayerProfiles.Select(it => it.Name));
+        string playerProfilesCsv = string.Join(",", sceneData.SelectedPlayerProfiles.Select(it => it.Name));
         Debug.Log($"[{playerProfilesCsv}] start (or continue) singing of {SongMeta.Title}.");
 
         // Start the music
@@ -357,6 +357,11 @@ public class SingSceneController : MonoBehaviour
         }
 
         string songPath = SongMeta.Directory + Path.DirectorySeparatorChar + SongMeta.Mp3;
+        if (!File.Exists(songPath))
+        {
+            Debug.LogWarning($"Song audio file not found! {songPath}");
+            return;
+        }
         LoadAudio(songPath);
         waveOutDevice.Play();
         if (sceneData.PositionInSongMillis > 0)

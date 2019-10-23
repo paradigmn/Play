@@ -230,6 +230,14 @@ public class SongRouletteController : MonoBehaviour
         SelectSong(nextSong);
     }
 
+    public void SelectRandomSong()
+    {
+        int songIndex = new System.Random().Next(0, songs.Count - 1);
+        Debug.Log("next random song index: " + songIndex);
+        SongMeta nextSong = GetSongAtIndex(songIndex);
+        SelectSong(nextSong);
+    }
+
     private SongMeta GetSongAtIndex(int nextIndex)
     {
         if (songs.Count == 0)

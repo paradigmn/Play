@@ -11,6 +11,7 @@ public class SongSelectSceneKeyboardInputController : MonoBehaviour
 
     private const KeyCode QuickSearchSong = KeyCode.LeftControl;
     private const KeyCode QuickSearchArtist = KeyCode.LeftAlt;
+    private const KeyCode RandomSongShortcut = KeyCode.R;
 
     void Update()
     {
@@ -37,6 +38,14 @@ public class SongSelectSceneKeyboardInputController : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyUp(KeyCode.Backspace))
+        {
+            if (!songSelectSceneController.IsSearchEnabled())
+            {
+                SceneNavigator.Instance.LoadScene(EScene.MainScene);
+            }
+        }
+
         if (Input.GetKeyUp(StartSingSceneShortcut))
         {
             songSelectSceneController.OnStartSingScene();
@@ -49,6 +58,11 @@ public class SongSelectSceneKeyboardInputController : MonoBehaviour
         if (Input.GetKeyDown(QuickSearchSong))
         {
             songSelectSceneController.EnableSearch(SearchInputField.ESearchMode.BySongTitle);
+        }
+
+        if (Input.GetKeyDown(RandomSongShortcut))
+        {
+            songSelectSceneController.OnRandomSong();
         }
     }
 }

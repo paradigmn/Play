@@ -128,7 +128,8 @@ public class SongSelectSceneController : MonoBehaviour
         bool hasVideo = !string.IsNullOrEmpty(selectedSong.Video);
         videoIndicator.SetActive(hasVideo);
 
-        bool isDuet = selectedSong.VoiceNames.Keys.Count == 2;
+        Dictionary<string, string> voiceNames = selectedSong.VoiceNames;
+        bool isDuet = voiceNames.Keys.Count == 2;
         duetIndicator.SetActive(isDuet);
     }
 
@@ -149,6 +150,11 @@ public class SongSelectSceneController : MonoBehaviour
     public void OnPreviousSong()
     {
         songRouletteController.SelectPreviousSong();
+    }
+
+    public void OnRandomSong()
+    {
+        songRouletteController.SelectRandomSong();
     }
 
     public void OnStartSingScene()
