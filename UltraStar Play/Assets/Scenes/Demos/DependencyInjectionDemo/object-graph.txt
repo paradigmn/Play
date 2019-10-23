@@ -1,0 +1,4 @@
+digraph { 
+rankdir=LR;
+DependencyInjectionDemoImage -> I18NManager; 
+ }
