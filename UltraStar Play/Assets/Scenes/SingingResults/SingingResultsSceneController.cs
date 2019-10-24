@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class SingingResultsSceneController : MonoBehaviour
 {
@@ -22,9 +23,21 @@ public class SingingResultsSceneController : MonoBehaviour
         }
     }
 
+    private SceneNavigator sceneNavigator;
+    private SongMetaManager songMetaManager;
+    private PlayerProfileManager playerProfileManager;
+
+    [Inject]
+    public void InitDependencies(SceneNavigator sceneNavigator, SongMetaManager songMetaManager, PlayerProfileManager playerProfileManager)
+    {
+        this.sceneNavigator = sceneNavigator;
+        this.songMetaManager = songMetaManager;
+        this.playerProfileManager = playerProfileManager;
+    }
+
     void Start()
     {
-        sceneData = SceneNavigator.Instance.GetSceneData<SingingResultsSceneData>(CreateDefaultSceneData());
+        sceneData = sceneNavigator.GetSceneData<SingingResultsSceneData>(CreateDefaultSceneData());
         SelectLayout();
         FillLayout();
     }
@@ -32,8 +45,8 @@ public class SingingResultsSceneController : MonoBehaviour
     private void FillLayout()
     {
         SongMeta songMeta = sceneData.SongMeta;
-        string titleText = (String.IsNullOrEmpty(songMeta.Title)) ? "" : songMeta.Title;
-        string artistText = (String.IsNullOrEmpty(songMeta.Artist)) ? "" : " - " + songMeta.Artist;
+        string titleText = (string.IsNullOrEmpty(songMeta.Title)) ? "" : songMeta.Title;
+        string artistText = (string.IsNullOrEmpty(songMeta.Artist)) ? "" : " - " + songMeta.Artist;
         songLabel.text = titleText + artistText;
 
         int i = 0;
@@ -77,7 +90,7 @@ public class SingingResultsSceneController : MonoBehaviour
     private SingingResultsSceneData CreateDefaultSceneData()
     {
         SingingResultsSceneData data = new SingingResultsSceneData();
-        data.SongMeta = SongMetaManager.Instance.SongMetas[0];
+        data.SongMeta = songMetaManager.SongMetas[0];
 
         SingingResultsSceneData.PlayerScoreData playerScoreData = new SingingResultsSceneData.PlayerScoreData();
         playerScoreData.TotalScore = 6500;
@@ -85,7 +98,7 @@ public class SingingResultsSceneController : MonoBehaviour
         playerScoreData.GoldenNotesScore = 2000;
         playerScoreData.PerfectSentenceBonusScore = 500;
 
-        data.AddPlayerScores(PlayerProfileManager.Instance.PlayerProfiles[0], playerScoreData);
+        data.AddPlayerScores(playerProfileManager.PlayerProfiles[0], playerScoreData);
         return data;
     }
 
@@ -94,6 +107,6 @@ public class SingingResultsSceneController : MonoBehaviour
         SongSelectSceneData songSelectSceneData = new SongSelectSceneData();
         songSelectSceneData.SongMeta = sceneData.SongMeta;
 
-        SceneNavigator.Instance.LoadScene(EScene.SongSelectScene, songSelectSceneData);
+        sceneNavigator.LoadScene(EScene.SongSelectScene, songSelectSceneData);
     }
 }
