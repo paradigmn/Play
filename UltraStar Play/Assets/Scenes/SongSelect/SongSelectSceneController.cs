@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
-using System.Xml.Linq;
 using System;
 using UnityEngine.UI;
-using UnityEngine.Events;
 using System.Linq;
+using Zenject;
 
 public class SongSelectSceneController : MonoBehaviour
 {
@@ -30,6 +27,18 @@ public class SongSelectSceneController : MonoBehaviour
 
     private SongMeta selectedSongBeforeSearch;
 
+    private SceneNavigator sceneNavigator;
+    private SongMetaManager songMetaManager;
+    private PlayerProfileManager playerProfileManager;
+
+    [Inject]
+    public void InitDependencies(SceneNavigator sceneNavigator, SongMetaManager songMetaManager, PlayerProfileManager playerProfileManager)
+    {
+        this.sceneNavigator = sceneNavigator;
+        this.songMetaManager = songMetaManager;
+        this.playerProfileManager = playerProfileManager;
+    }
+
     private SongMeta SelectedSong
     {
         get
@@ -48,12 +57,10 @@ public class SongSelectSceneController : MonoBehaviour
 
     void Start()
     {
-        sceneData = SceneNavigator.Instance.GetSceneData(CreateDefaultSceneData());
-
+        sceneData = sceneNavigator.GetSceneData(CreateDefaultSceneData());
         searchTextInputField = GameObjectUtils.FindObjectOfType<SearchInputField>(true);
-
-        songMetas = SongMetaManager.Instance.SongMetas;
-        List<PlayerProfile> playerProfiles = PlayerProfileManager.Instance.PlayerProfiles;
+        songMetas = songMetaManager.SongMetas;
+        List<PlayerProfile> playerProfiles = playerProfileManager.PlayerProfiles;
         PopulatePlayerProfileList(playerProfiles);
 
         songRouletteController = FindObjectOfType<SongRouletteController>();
@@ -94,12 +101,12 @@ public class SongSelectSceneController : MonoBehaviour
         SingSceneData singSceneData = new SingSceneData();
         singSceneData.SelectedSongMeta = songMeta;
 
-        List<PlayerProfile> allPlayerProfiles = PlayerProfileManager.Instance.PlayerProfiles;
+        List<PlayerProfile> allPlayerProfiles = playerProfileManager.PlayerProfiles;
         PlayerProfile defaultPlayerProfile = allPlayerProfiles[0];
         PlayerProfile playerProfile = selectedPlayerProfile.OrIfNull(defaultPlayerProfile);
         singSceneData.AddPlayerProfile(playerProfile);
 
-        SceneNavigator.Instance.LoadScene(EScene.SingScene, singSceneData);
+        sceneNavigator.LoadScene(EScene.SingScene, singSceneData);
     }
 
     private void OnPlayerProfileButtonClicked(PlayerProfile playerProfile)

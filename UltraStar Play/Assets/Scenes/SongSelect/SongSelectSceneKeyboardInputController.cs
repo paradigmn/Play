@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class SongSelectSceneKeyboardInputController : MonoBehaviour
 {
@@ -12,9 +13,16 @@ public class SongSelectSceneKeyboardInputController : MonoBehaviour
     private const KeyCode QuickSearchSong = KeyCode.LeftControl;
     private const KeyCode QuickSearchArtist = KeyCode.LeftAlt;
 
+    private SongSelectSceneController songSelectSceneController;
+
+    [Inject]
+    public void InitDependencies(SongSelectSceneController songSelectSceneController)
+    {
+        this.songSelectSceneController = songSelectSceneController;
+    }
+
     void Update()
     {
-        SongSelectSceneController songSelectSceneController = SongSelectSceneController.Instance;
         if (Input.GetKeyUp(NextSongShortcut))
         {
             songSelectSceneController.OnNextSong();
