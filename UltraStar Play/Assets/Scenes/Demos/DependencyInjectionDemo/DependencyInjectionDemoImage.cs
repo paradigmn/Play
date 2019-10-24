@@ -8,15 +8,16 @@ public class DependencyInjectionDemoImage : MonoBehaviour
 {
     public Text text;
 
-    private I18NManager i18nManager;
-    private string injectedName;
-
+    // Disable warning 0649, i.e., that the variables are never assigned
+    // and will always have their default value, because this is not true.
+    // The values are injected from outside.
+#pragma warning disable 0649
     [Inject]
-    public void InitDependencies(I18NManager i18nManager, string injectedName)
-    {
-        this.i18nManager = i18nManager;
-        this.injectedName = injectedName;
-    }
+    private I18NManager i18nManager;
+
+    [Inject(Id = "theInjectedNameId")]
+    private string injectedName;
+#pragma warning restore 0649
 
     void Start()
     {
